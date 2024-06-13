@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Student Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Update Student Information</h2>
+        <form id="studentForm">
+            <label for="studentId">Student ID:</label>
+            <input type="text" id="studentId" name="studentId" required><br>
+
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName" name="studentName" required><br>
+
+            <label for="grade">Grade:</label>
+            <input type="text" id="grade" name="grade" required><br>
+
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" required><br>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address"><br>
+
+            <button type="button" onclick="updateStudent()">Update Student</button>
+        </form>
+
+        <div id="resultMessage" class="error-message"></div>
+    </div>
+
+    <script>
+        async function updateStudent() {
+            const studentId = document.getElementById("studentId").value;
+            const studentName = document.getElementById("studentName").value;
+            const grade = document.getElementById("grade").value;
+            const dateOfBirth = document.getElementById("dateOfBirth").value;
+            const address = document.getElementById("address").value;
+
+            const updateResponse = await fetch(`/updateStudent/${studentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    studentName,
+                    grade,
+                    dateOfBirth,
+                    address
+                })
+            });
+
+            if (updateResponse.ok) {
+                const updateData = await updateResponse.json();
+                document.getElementById("resultMessage").innerText = updateData.message;
+            } else {
+                document.getElementById("resultMessage").innerText = "Error updating student";
+            }
+        }
+    </script>
+</body>
+</html>
